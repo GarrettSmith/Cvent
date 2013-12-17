@@ -17,7 +17,10 @@ module Cvent
         body: { 
           ecode: @ecode,
           first_name: user_fields[:first_name],
-          last_name: user_fields[:last_name]
+          last_name: user_fields[:last_name],
+          email_address: user_fields[:email_address],
+          source_id: user_fields[:source_id],
+          target: user_fields[:target] || ""
         }
       }
     end

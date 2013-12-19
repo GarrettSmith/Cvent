@@ -1,28 +1,14 @@
 module Cvent
   class Event
-    include HTTParty
+    OBJECT_TYPE = "Event"
 
-    def initialize(event_code)
-      @ecode = event_code
-    end
-
-    def authenticate(user_fields = {})
-      self.class.post(Cvent::AUTHENTICATION_URL, authentication_options(user_fields))
-    end
-
-    private
-
-    def authentication_options(user_fields)
-      options = { 
-        body: { 
-          ecode: @ecode,
-          first_name: user_fields[:first_name],
-          last_name: user_fields[:last_name],
-          email_address: user_fields[:email_address],
-          source_id: user_fields[:source_id],
-          target: user_fields[:target] || ""
-        }
+    def self.get_updated_ids(start_date, end_date = DateTime.now)
+      message = {
+        "ObjectType" => self::OBJECT_TYPE,
+        "StartDate" => start_date.strftime("%Y-%m-%dT%H:%M:%S"),
+        "EndDate" => end_date.strftime("%Y-%m-%dT%H:%M:%S")
       }
+      response = Cvent::Client.instance.call(:get_updated, message)
     end
   end
 end

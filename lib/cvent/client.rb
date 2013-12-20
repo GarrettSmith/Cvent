@@ -7,7 +7,7 @@ module Cvent
     attr_accessor :server_url
     attr_accessor :cvent_session_header
 
-    def load_config(file_path, environment)
+    def load_config(file_path, environment=:default)
       @@client_configuration = YAML::load(File.open(file_path))
       @@environment = environment.to_s
     end

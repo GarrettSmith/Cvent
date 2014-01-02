@@ -2,7 +2,7 @@ module Cvent
   class Event
     OBJECT_TYPE = "Event"
 
-    attr_accessor :title
+    attr_accessor :title, :code, :start_date, :end_date, :launch_date, :timezone, :description, :internal_note, :status, :capacity, :category, :meeting_request_id, :currency, :planning_status, :location, :street_address1, :street_address2, :street_address3, :city, :state, :state_code, :postal_code, :country, :country_code, :phone_number, :planner_first_name, :planner_last_name, :planner_email_address, :last_date_modified, :rsv_pby_date, :archive_date, :closed_by, :external_auth
 
     def self.get_updated_ids(start_date, end_date = DateTime.now)
       message = {
@@ -50,6 +50,38 @@ module Cvent
       #TODO: Transform into a proper event object
       e = Cvent::Event.new
       e.title = cvent_event[:title]
+      e.code = cvent_event[:code]
+      e.start_date = cvent_event[:start_date]
+      e.end_date = cvent_event[:end_date]
+      e.launch_date = cvent_event[:launch_date]
+      e.timezone = cvent_event[:timezone]
+      e.description = cvent_event[:description]
+      e.internal_note = cvent_event[:internal_note]
+      e.status = cvent_event[:status]
+      e.capacity = cvent_event[:capacity]
+      e.category = cvent_event[:category]
+      e.meeting_request_id = cvent_event[:meeting_request_id]
+      e.currency = cvent_event[:currency]
+      e.planning_status = cvent_event[:planning_status]
+      e.location = cvent_event[:location]
+      e.street_address1 = cvent_event[:street_address1]
+      e.street_address2 = cvent_event[:street_address2]
+      e.street_address3 = cvent_event[:street_address3]
+      e.city = cvent_event[:city]
+      e.state = cvent_event[:state]
+      e.state_code = cvent_event[:state_code]
+      e.postal_code = cvent_event[:postal_code]
+      e.country = cvent_event[:country]
+      e.country_code = cvent_event[:country_code]
+      e.phone_number = cvent_event[:phone_number]
+      e.planner_first_name = cvent_event[:planner_first_name]
+      e.planner_last_name = cvent_event[:planner_last_name]
+      e.planner_email_address = cvent_event[:planner_email_address]
+      e.last_date_modified = cvent_event[:last_date_modified]
+      e.rsv_pby_date = cvent_event[:rsv_pby_date]
+      e.archive_date = cvent_event[:archive_date]
+      e.closed_by = cvent_event[:closed_by]
+      e.external_auth = cvent_event[:external_auth]
 
       return cvent_event
     end

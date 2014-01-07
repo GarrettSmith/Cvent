@@ -53,16 +53,14 @@ describe Cvent::Event do
       end
     end
 
-
     context "when an event is returned" do
       before(:each) do 
         Cvent::Client.stub_chain(:instance, :call).and_return(event_single_response)
       end
 
-      pending "returns an event object with the fields filled in" do
+      it "returns an event object with the fields filled in" do
         result = Cvent::Event.fetch_from_ids(["abc123"])
         result.length.should == 1
-
         result[0].title.should == "Test Event"
         result[0].code.should == "XHN9PVNPH3F"
         result[0].start_date.should == "2014-01-16T18:00:00"
@@ -79,7 +77,7 @@ describe Cvent::Event do
         result[0].planning_status.should == ""
         result[0].location.should == "The City Club"
         result[0].street_address1.should == "850 Euclid Ave #200"
-        result[0]e.street_address2.should == ""
+        result[0].street_address2.should == ""
         result[0].street_address3.should == ""
         result[0].city.should == "Cleveland"
         result[0].state.should == "Ohio"
@@ -100,4 +98,3 @@ describe Cvent::Event do
     end
   end
 end
-

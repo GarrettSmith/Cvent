@@ -8,7 +8,6 @@ group :test do
   gem 'turn'
   gem 'rspec'
   gem 'rake'
-  gem 'minitest'
 end
 
 # Specify your gem's dependencies in cvent.gemspec

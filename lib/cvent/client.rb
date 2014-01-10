@@ -31,7 +31,6 @@ module Cvent
     end
 
     def call(method, message={})
-      raise InvalidArgumentError.new "#{@@client}"
       @@client.call(method, message: message)
     end
 

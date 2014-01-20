@@ -50,7 +50,7 @@ module Cvent
       #TODO: Transform into a proper event object
       e = Cvent::Event.new
       e.title = cvent_event[:@event_title]
-      e.code = cvent_event[:@event_code]
+      e.code = cvent_event[:EventCode]
       e.start_date = cvent_event[:@event_start_date]
       e.end_date = cvent_event[:@event_end_date]
       e.launch_date = cvent_event[:@event_launch_date]

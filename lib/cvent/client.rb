@@ -10,6 +10,7 @@ module Cvent
     def load_config(file_path, environment=:default)
       @@client_configuration = YAML::load(File.open(file_path))
       @@environment = environment.to_s
+      @@connected = nil
     end
 
     def connect
@@ -24,6 +25,7 @@ module Cvent
         }
         response = self.call(:login, message)
         process_response(response)
+        @@connected = Time.now
         return true
       rescue => e
         raise Cvent::ConnectionFailureError.new("Unable to connect to Cvent API: #{e.message}")
@@ -31,6 +33,8 @@ module Cvent
     end
 
     def call(method, message={})
+      self.connect unless method == :login || @@connected
+
       @@client.call(method, message: message)
     end
 

@@ -85,13 +85,13 @@ module Cvent
       e.closed_by = cvent_event[:@closed_by]
       e.external_auth = cvent_event[:@external_authentication]
 
-      if cvent_event[:@web_link_detail]
-        cvent_event[:@web_link_detail].each do |link|
-          if link[:@Target] == "Registration"
-             e.registration_url = link[:@URL]
+      if cvent_event[:@weblink_detail]
+        cvent_event[:@weblink_detail].each do |link|
+          if link[:@target] == "Registration"
+             e.registration_url = link[:@url]
           end
-          if link[:@Target] == "Event Summary"
-            e.summary_url = link[:@URL] 
+          if link[:@target] == "Event Summary"
+            e.summary_url = link[:@url] 
           end
         end
       end

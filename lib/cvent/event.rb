@@ -2,7 +2,7 @@ module Cvent
   class Event
     OBJECT_TYPE = "Event"
 
-    attr_accessor :title, :code, :start_date, :end_date, :launch_date, :timezone, :description, :internal_note, :status, :capacity, :category, :meeting_request_id, :currency, :planning_status, :location, :street_address1, :street_address2, :street_address3, :city, :state, :state_code, :postal_code, :country, :country_code, :phone_number, :planner_first_name, :planner_last_name, :planner_email_address, :last_date_modified, :rsv_pby_date, :archive_date, :closed_by, :external_auth
+    attr_accessor :title, :code, :start_date, :end_date, :launch_date, :timezone, :description, :internal_note, :status, :capacity, :category, :meeting_request_id, :currency, :planning_status, :location, :street_address1, :street_address2, :street_address3, :city, :state, :state_code, :postal_code, :country, :country_code, :phone_number, :planner_first_name, :planner_last_name, :planner_email_address, :last_date_modified, :rsvp_by_date, :archive_date, :closed_by, :external_auth
 
     def self.get_updated_ids(start_date, end_date = DateTime.now)
       message = {
@@ -35,6 +35,7 @@ module Cvent
 
         if response.body && response.body[:retrieve_response] && response.body[:retrieve_response][:retrieve_result] && response.body[:retrieve_response][:retrieve_result][:cv_object]
           cvent_events = response.body[:retrieve_response][:retrieve_result][:cv_object]
+
           cvent_events = [cvent_events] if cvent_events.is_a? Hash
 
           cvent_events.collect { |e| self.transform_to_event_object(e) }
@@ -47,10 +48,9 @@ module Cvent
     private
 
     def self.transform_to_event_object(cvent_event)
-      #TODO: Transform into a proper event object
       e = Cvent::Event.new
       e.title = cvent_event[:@event_title]
-      e.code = cvent_event[:EventCode]
+      e.code = cvent_event[:@event_code]
       e.start_date = cvent_event[:@event_start_date]
       e.end_date = cvent_event[:@event_end_date]
       e.launch_date = cvent_event[:@event_launch_date]
@@ -78,12 +78,12 @@ module Cvent
       e.planner_last_name = cvent_event[:@planner_last_name]
       e.planner_email_address = cvent_event[:@planner_email_address]
       e.last_date_modified = cvent_event[:@last_modified_date]
-      e.rsv_pby_date = cvent_event[:@rsv_pby_date]
+      e.rsvp_by_date = cvent_event[:@rsv_pby_date]
       e.archive_date = cvent_event[:@archive_date]
       e.closed_by = cvent_event[:@closed_by]
-      e.external_auth = cvent_event[:external_authentication]
+      e.external_auth = cvent_event[:@external_authentication]
 
-      return cvent_event
+      return e
     end
   end
 end

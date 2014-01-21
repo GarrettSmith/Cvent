@@ -88,10 +88,10 @@ module Cvent
       if cvent_event[:@web_link_detail]
         cvent_event[:@web_link_detail].each do |link|
           if link[:@Target] == "Registration"
-             e.registration_url = cvent_event[:@URL]
+             e.registration_url = link[:@URL]
           end
           if link[:@Target] == "Event Summary"
-            e.summary_url = cvent_event[:@URL] 
+            e.summary_url = link[:@URL] 
           end
         end
       end

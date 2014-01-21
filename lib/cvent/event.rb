@@ -33,6 +33,8 @@ module Cvent
       begin
         response = Cvent::Client.instance.call(:retrieve, message)
 
+        puts "RESP: #{response.inspect}"
+
         if response.body && response.body[:retrieve_response] && response.body[:retrieve_response][:retrieve_result] && response.body[:retrieve_response][:retrieve_result][:cv_object]
           cvent_events = response.body[:retrieve_response][:retrieve_result][:cv_object]
 
@@ -82,6 +84,14 @@ module Cvent
       e.archive_date = cvent_event[:@archive_date]
       e.closed_by = cvent_event[:@closed_by]
       e.external_auth = cvent_event[:@external_authentication]
+
+      #if cvent_event[:@web_link_detail]
+        #cvent_event[:@web_link_detail].each do |link|
+          #if link[:@Target] == "Registration"
+            ## set reg url
+          #end
+        #end
+      #end
 
       return e
     end

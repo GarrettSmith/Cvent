@@ -94,6 +94,8 @@ describe Cvent::Event do
         result[0].archive_date.should == "2014-04-16T00:00:00"
         result[0].closed_by.should == ""
         result[0].external_auth.should == "true"
+        result[0].registration_url == "http://www.cvent.com/d/n4qlpx/4W"
+        result[0].summary_url == "http://www.cvent.com/d/n4qlpx"
       end
     end
   end

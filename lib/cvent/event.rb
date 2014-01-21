@@ -2,7 +2,7 @@ module Cvent
   class Event
     OBJECT_TYPE = "Event"
 
-    attr_accessor :title, :code, :start_date, :end_date, :launch_date, :timezone, :description, :internal_note, :status, :capacity, :category, :meeting_request_id, :currency, :planning_status, :location, :street_address1, :street_address2, :street_address3, :city, :state, :state_code, :postal_code, :country, :country_code, :phone_number, :planner_first_name, :planner_last_name, :planner_email_address, :last_date_modified, :rsvp_by_date, :archive_date, :closed_by, :external_auth
+    attr_accessor :title, :code, :start_date, :end_date, :launch_date, :timezone, :description, :internal_note, :status, :capacity, :category, :meeting_request_id, :currency, :planning_status, :location, :street_address1, :street_address2, :street_address3, :city, :state, :state_code, :postal_code, :country, :country_code, :phone_number, :planner_first_name, :planner_last_name, :planner_email_address, :last_date_modified, :rsvp_by_date, :archive_date, :closed_by, :external_auth, :registration_url, :summary_url
 
     def self.get_updated_ids(start_date, end_date = DateTime.now)
       message = {
@@ -85,13 +85,16 @@ module Cvent
       e.closed_by = cvent_event[:@closed_by]
       e.external_auth = cvent_event[:@external_authentication]
 
-      #if cvent_event[:@web_link_detail]
-        #cvent_event[:@web_link_detail].each do |link|
-          #if link[:@Target] == "Registration"
-            ## set reg url
-          #end
-        #end
-      #end
+      if cvent_event[:@web_link_detail]
+        cvent_event[:@web_link_detail].each do |link|
+          if link[:@Target] == "Registration"
+             e.registration_url = cvent_event[:@URL]
+          end
+          if link[:@Target] == "Event Summary"
+            e.summary_url = cvent_event[:@URL] 
+          end
+        end
+      end
 
       return e
     end

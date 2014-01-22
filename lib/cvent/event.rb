@@ -91,12 +91,7 @@ module Cvent
       if cvent_event[:weblink_detail]
         cvent_event[:weblink_detail].each do |link|
           e.links << Cvent::Link.create_from_hash(link)
-        end
-        #registration_link = cvent_event[:weblink_detail].first{|l| l[:@target] == "Registration"}
-        #e.registration_url = registration_link[:@url] if registration_link
-
-        #summary_link = cvent_event[:weblink_detail].first{|l| l[:@target] == "Event Summary"}        
-        #e.summary_url = summary_link[:@url] if summary_link        
+        end      
       end
 
       return e

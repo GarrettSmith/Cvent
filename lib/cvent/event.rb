@@ -2,7 +2,12 @@ module Cvent
   class Event
     OBJECT_TYPE = "Event"
 
-    attr_accessor :title, :code, :start_date, :end_date, :launch_date, :timezone, :description, :internal_note, :status, :capacity, :category, :meeting_request_id, :currency, :planning_status, :location, :street_address1, :street_address2, :street_address3, :city, :state, :state_code, :postal_code, :country, :country_code, :phone_number, :planner_first_name, :planner_last_name, :planner_email_address, :last_date_modified, :rsvp_by_date, :archive_date, :closed_by, :external_auth, :registration_url, :summary_url
+    attr_accessor :title, :code, :start_date, :end_date, :launch_date, :timezone, :description, :internal_note, :status, :capacity, :category, :meeting_request_id, :currency, :planning_status, :location, :street_address1, :street_address2, :street_address3, :city, :state, :state_code, :postal_code, :country, :country_code, :phone_number, :planner_first_name, :planner_last_name, :planner_email_address, :last_date_modified, :rsvp_by_date, :archive_date, :closed_by, :external_auth
+    attr_accessor :links
+
+    def initialize
+      self.links = []
+    end
 
     def self.get_updated_ids(start_date, end_date = DateTime.now)
       message = {
@@ -33,10 +38,8 @@ module Cvent
       begin
         response = Cvent::Client.instance.call(:retrieve, message)
 
-        puts "RESP: #{response.inspect}"
-
         if response.body && response.body[:retrieve_response] && response.body[:retrieve_response][:retrieve_result] && response.body[:retrieve_response][:retrieve_result][:cv_object]
-          cvent_events = response.body[:retrieve_response][:retrieve_result][:cv_object]
+          cvent_events = response.body[:retrieve_response][:retrieve_result][:cv_object] 
 
           cvent_events = [cvent_events] if cvent_events.is_a? Hash
 
@@ -85,15 +88,15 @@ module Cvent
       e.closed_by = cvent_event[:@closed_by]
       e.external_auth = cvent_event[:@external_authentication]
 
-      if cvent_event[:@weblink_detail]
-        cvent_event[:@weblink_detail].each do |link|
-          if link[:@target] == "Registration"
-             e.registration_url = link[:@url]
-          end
-          if link[:@target] == "Event Summary"
-            e.summary_url = link[:@url] 
-          end
+      if cvent_event[:weblink_detail]
+        cvent_event[:weblink_detail].each do |link|
+          e.links << Cvent::Link.create_from_hash(link)
         end
+        #registration_link = cvent_event[:weblink_detail].first{|l| l[:@target] == "Registration"}
+        #e.registration_url = registration_link[:@url] if registration_link
+
+        #summary_link = cvent_event[:weblink_detail].first{|l| l[:@target] == "Event Summary"}        
+        #e.summary_url = summary_link[:@url] if summary_link        
       end
 
       return e

@@ -2,7 +2,7 @@ module Cvent
   class Event
     OBJECT_TYPE = "Event"
 
-    attr_accessor :title, :code, :start_date, :end_date, :launch_date, :timezone, :description, :internal_note, :status, :capacity, :category, :meeting_request_id, :currency, :planning_status, :location, :street_address1, :street_address2, :street_address3, :city, :state, :state_code, :postal_code, :country, :country_code, :phone_number, :planner_first_name, :planner_last_name, :planner_email_address, :last_date_modified, :rsvp_by_date, :archive_date, :closed_by, :external_auth
+    attr_accessor :id, :title, :code, :start_date, :end_date, :launch_date, :timezone, :description, :internal_note, :status, :capacity, :category, :meeting_request_id, :currency, :planning_status, :location, :street_address1, :street_address2, :street_address3, :city, :state, :state_code, :postal_code, :country, :country_code, :phone_number, :planner_first_name, :planner_last_name, :planner_email_address, :last_date_modified, :rsvp_by_date, :archive_date, :closed_by, :external_auth
     attr_accessor :links
 
     def initialize
@@ -54,6 +54,7 @@ module Cvent
 
     def self.transform_to_event_object(cvent_event)
       e = Cvent::Event.new
+      e.id = cvent_event[:@id]
       e.title = cvent_event[:@event_title]
       e.code = cvent_event[:@event_code]
       e.start_date = cvent_event[:@event_start_date]

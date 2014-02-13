@@ -28,10 +28,10 @@ module Cvent
 
           return Cvent::Speaker.fetch_from_ids(ids)
         else
-          return "FAIL - #{response.body.inspect}"
+          return []
         end
       rescue => e
-        return "FAIL - #{e.message}"
+        return []
       end
     end
 

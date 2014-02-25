@@ -51,7 +51,7 @@ module Cvent
 
           cvent_events.collect { |e| self.transform_to_event_object(e) }
         end
-      rescue => e
+      rescue
         return []
       end
     end
@@ -103,7 +103,7 @@ module Cvent
 
       if cvent_event[:custom_field_detail]
         cvent_event[:custom_field_detail].each do |field|
-          e.custom_fields << Cvent::Field.create_from_hash(field)
+          e.custom_fields << Cvent::CustomField.create_from_hash(field)
         end
       end
 

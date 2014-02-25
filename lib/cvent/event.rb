@@ -5,10 +5,12 @@ module Cvent
     attr_accessor :id, :title, :code, :start_date, :end_date, :launch_date, :timezone, :description, :internal_note, :status, :capacity, :category, :meeting_request_id, :currency, :planning_status, :location, :street_address1, :street_address2, :street_address3, :city, :state, :state_code, :postal_code, :country, :country_code, :phone_number, :planner_first_name, :planner_last_name, :planner_email_address, :last_date_modified, :rsvp_by_date, :archive_date, :closed_by, :external_auth
     attr_accessor :speakers
     attr_accessor :links
+    attr_accessor :custom_fields
 
     def initialize
       self.links = []
       self.speakers = []
+      self.custom_fields = []
     end
 
     def self.get_updated_ids(start_date, end_date = DateTime.now)
@@ -96,6 +98,12 @@ module Cvent
       if cvent_event[:weblink_detail]
         cvent_event[:weblink_detail].each do |link|
           e.links << Cvent::Link.create_from_hash(link)
+        end
+      end
+
+      if cvent_event[:custom_field_detail]
+        cvent_event[:custom_field_detail].each do |field|
+          e.custom_fields << Cvent::Field.create_from_hash(field)
         end
       end
 

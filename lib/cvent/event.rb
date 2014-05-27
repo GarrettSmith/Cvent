@@ -2,7 +2,7 @@ module Cvent
   class Event
     OBJECT_TYPE = "Event"
 
-    attr_accessor :id, :title, :code, :start_date, :end_date, :launch_date, :timezone, :description, :internal_note, :status, :capacity, :category, :meeting_request_id, :currency, :planning_status, :location, :street_address1, :street_address2, :street_address3, :city, :state, :state_code, :postal_code, :country, :country_code, :phone_number, :planner_first_name, :planner_last_name, :planner_email_address, :last_date_modified, :rsvp_by_date, :archive_date, :closed_by, :external_auth
+    attr_accessor :id, :title, :code, :start_date, :end_date, :launch_date, :timezone, :description, :internal_note, :status, :capacity, :category, :meeting_request_id, :currency, :planning_status, :location, :street_address1, :street_address2, :street_address3, :city, :state, :state_code, :postal_code, :country, :country_code, :phone_number, :planner_first_name, :planner_last_name, :planner_email_address, :last_date_modified, :rsvp_by_date, :archive_date, :closed_by, :external_auth, :hidden
     attr_accessor :speakers
     attr_accessor :links
     attr_accessor :custom_fields
@@ -94,6 +94,7 @@ module Cvent
       e.archive_date = cvent_event[:@archive_date]
       e.closed_by = cvent_event[:@closed_by]
       e.external_auth = cvent_event[:@external_authentication]
+      e.hidden = cvent_event[:@hidden]
 
       if cvent_event[:weblink_detail]
         cvent_event[:weblink_detail].each do |link|

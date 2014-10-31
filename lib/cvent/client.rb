@@ -17,7 +17,7 @@ module Cvent
       raise Cvent::MissingCredentialsError.new("You must provide a config file by calling 'load_config' before connecting.") if @@client_configuration.nil?
 
       begin
-        @@client = ::Savon.client(wsdl: Cvent::WSDL_PATH, ssl_verify_mode: :none, ssl_version: :TLSv1)
+        @@client = ::Savon.client(wsdl: Cvent::WSDL_PATH, ssl_version: :TLSv1)
         message = {
           "AccountNumber" => @@client_configuration[@@environment]["account"],
           "UserName" => @@client_configuration[@@environment]["username"],
@@ -47,6 +47,7 @@ module Cvent
         @@client = ::Savon.client(
           wsdl: Cvent::WSDL_PATH,
           endpoint: self.server_url,
+          ssl_version: :TLSv1,
           soap_header: {
             "tns:CventSessionHeader" => { "tns:CventSessionValue" => self.cvent_session_header }
           }

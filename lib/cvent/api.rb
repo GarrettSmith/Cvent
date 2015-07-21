@@ -56,6 +56,15 @@ module Cvent
       :upsert_contact,
       :validate_invitee
 
+    def self.retrieve(type, ids)
+      super(message: {
+        "ObjectType" => type,
+        "ins0:Ids" => {
+          "ins0:Id" => ids
+        }
+      })
+    end
+
     private
 
     def self.authenticated?

@@ -1,3 +1,5 @@
+require 'byebug'
+
 module Cvent
   class Api
     extend Savon::Model
@@ -57,12 +59,25 @@ module Cvent
       :validate_invitee
 
     def self.retrieve(type, ids)
-      super(message: {
-        "ObjectType" => type,
-        "ins0:Ids" => {
-          "ins0:Id" => ids
+      super message: {
+        ObjectType: type,
+        'ins0:Ids' => {
+          'ins0:Id' => ids
         }
-      })
+      }
+    end
+
+    def self.search(type, search_type, opts = {})
+      raise "Invalid Search Type: \'#{search_type}\'" unless self.valid_search_type? search_type
+      super message: {
+        ObjectType: type,
+        'ins0:CvSearchObject' => {
+          attributes!: {
+            'ins0:SearchType' => search_type
+          },
+          'ins0:Filter' => search_filter(opts)
+        }
+      }
     end
 
     private
@@ -80,19 +95,33 @@ module Cvent
       if response.success? && login_result[:@login_success]
         cvent_session_header = login_result[:@cvent_session_header]
         server_url = login_result[:@server_url]
-        @client = Savon.client(
-          wsdl: Cvent.config['wsdl'],
-          endpoint: server_url,
-          ssl_version: :TLSv1,
-          soap_header: {
-            "tns:CventSessionHeader" => {
-              "tns:CventSessionValue" => cvent_session_header
-            }
+        @client = Savon.client do
+          convert_request_keys_to :camelcase
+          endpoint server_url
+          soap_version 2
+          ssl_version :TLSv1
+          wsdl Cvent.config['wsdl']
+          soap_header 'tns:CventSessionHeader' => {
+            'tns:CventSessionValue' => cvent_session_header
           }
-        )
+        end
         @authenticated = true
       else
         raise Cvent::ConnectionFailureError.new
+      end
+    end
+
+    def self.valid_search_type?(search_type)
+      ['AndSearch'].include? search_type
+    end
+
+    def self.search_filter(opts)
+      opts.map do |field, value|
+        {
+          'ins0:Field' => field,
+          'ins0:Operator' => "Equals",
+          'ins0:Value' => value
+        }
       end
     end
   end

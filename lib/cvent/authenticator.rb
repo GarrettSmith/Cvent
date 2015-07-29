@@ -3,16 +3,19 @@ module Cvent
     extend Savon::Model
 
     def self.client
-      super wsdl: Cvent.config['wsdl'], ssl_version: :TLSv1
+      super convert_request_keys_to: :camelcase,
+        soap_version: 2,
+        ssl_version: :TLSv1,
+        wsdl: Cvent.config['wsdl']
     end
 
     operations :login
 
     def self.login(account, username, password)
       super message: {
-        'AccountNumber' => account,
-        'UserName' => username,
-        'Password' => password
+        account_number: account,
+        user_name: username,
+        password: password
       }
     end
   end

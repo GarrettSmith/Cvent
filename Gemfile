@@ -10,5 +10,9 @@ group :test do
   gem 'rake'
 end
 
+group :development do
+  gem 'byebug'
+end
+
 # Specify your gem's dependencies in cvent.gemspec
 gemspec

@@ -1,9 +1,6 @@
 require 'yaml'
-<<<<<<< HEAD
 require 'erb'
 
-=======
->>>>>>> 5427116df52ba2ac3199ff0588fbc65fcdcad8ff
 module Cvent
   WSDL_PATH = "https://api.cvent.com/soap/V200611.ASMX?WSDL"
   SANDBOX_WSDL_PATH = "https://sandbox-api.cvent.com/soap/V200611.ASMX?WSDL"

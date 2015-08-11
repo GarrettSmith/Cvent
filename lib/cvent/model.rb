@@ -60,6 +60,8 @@ module Cvent
         val.map { |v| model_wrap v }
       elsif val.is_a? Hash
         Model.new val
+      elsif val =~ /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/
+        Time.parse "#{val} GMT"
       else
         val
       end

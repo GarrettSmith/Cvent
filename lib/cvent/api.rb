@@ -83,7 +83,7 @@ module Cvent
     private
 
     def self.authenticated?
-      @authenticated
+      @authneticated && @authenticated + Cvent::SESSION_TIMEOUT < Time.now
     end
 
     def self.authenticate
@@ -105,7 +105,7 @@ module Cvent
             'tns:CventSessionValue' => cvent_session_header
           }
         end
-        @authenticated = true
+        @authenticated = Time.now
       else
         raise Cvent::ConnectionFailureError.new
       end

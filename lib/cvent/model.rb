@@ -37,24 +37,10 @@ module Cvent
     #end
 
     def initialize(hash)
-      hash.each do |key, val|
-        # Clean up attribute names
-        key = key.to_s.gsub(/[\W]/, '')
-        # Recursively wrap hashes
-        self.instance_variable_set("@#{key}",
-          val.is_a?(Hash) ? Model.new(val) : val)
-        # Create reader
-        self.class.send(:define_method,
-          key,
-          proc{self.instance_variable_get("@#{key}")})
-        # Create Setter
-        self.class.send(:define_method,
-          "#{key}=",
-          proc{|v| self.instance_variable_set("@#{key}", v)})
-      end
+      hash.each { |k, v| define_accessor k, v }
     end
 
-    private
+    protected
 
     def self.wrap(os)
       os = os.respond_to?(:to_ary) ? os : [os]
@@ -68,5 +54,70 @@ module Cvent
       os = os[additional_key] if additional_key
       os
     end
+
+    def self.model_wrap(val)
+      if val.is_a? Array
+        val.map { |v| model_wrap v }
+      elsif val.is_a? Hash
+        Model.new val
+      else
+        val
+      end
+    end
+
+    def define_accessor(key, val = nil)
+      key = var_name key
+      instance_var key, val
+      reader key
+      writer key
+    end
+
+    def define_reader(key, val = nil)
+      key = var_name key
+      instance_var key, val
+      reader key
+    end
+
+    def define_writer(key, val = nil)
+      key = var_name key
+      instance_var key, val
+      writer key
+    end
+
+    def define_instance_var(key, val = nil)
+      key = var_name key
+      instance_var key, val
+    end
+
+    def var_name(s)
+        s.to_s
+         .strip
+         .downcase
+         .gsub(/\s/, '_') # replace spaces with underscores
+         .gsub(/[\W]/, '') # remove odd characters
+    end
+
+    private
+
+    def reader(key)
+      self.class.send :define_method,
+        key,
+        proc { self.instance_variable_get(instance_var_name(key)) }
+    end
+
+    def writer(key)
+      self.class.send :define_method,
+        "#{key}=",
+        proc { |v| self.instance_variable_set(instance_var_name(key), v) }
+    end
+
+    def instance_var(key, val)
+      instance_variable_set(instance_var_name(key), self.class.model_wrap(val))
+    end
+
+    def instance_var_name(key)
+      "@#{key}"
+    end
+
   end
 end

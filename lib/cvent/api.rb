@@ -1,5 +1,3 @@
-require 'byebug'
-
 module Cvent
   class Api
     extend Savon::Model

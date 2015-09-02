@@ -9,7 +9,7 @@ module Cvent
       super
 
       # Create a accessor for each order detail product type
-      groups = order_detail.group_by { |item| item.product_type }
+      groups = Array(order_detail).group_by { |item| item.product_type }
       groups.each { |k, v| define_reader "#{k}s", v }
     end
   end
